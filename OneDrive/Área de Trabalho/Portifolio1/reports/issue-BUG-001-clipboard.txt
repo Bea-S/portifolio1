@@ -1,0 +1,48 @@
+# [BUG-001] Tarefa concluída volta para pendente após recarregar a página
+
+**Descrição**
+Ao marcar uma tarefa como concluída na aplicação web e recarregar a página, o status volta para pendente (checkbox desmarcado). Isso indica problema de persistência do estado no `localStorage`.
+
+**Passos para reproduzir**
+1. Abrir a aplicação: `http://127.0.0.1:4173`
+2. Criar uma nova tarefa (ex.: "Tarefa persistência")
+3. Marcar a tarefa como concluída (clicar no checkbox)
+4. Recarregar a página (F5)
+
+**Resultado esperado**
+A tarefa permanece com o status concluída (checkbox marcado e classe `completed`).
+
+**Resultado atual**
+A tarefa aparece como pendente (checkbox desmarcado) após recarregar a página.
+
+**Severidade:** Medium
+**Prioridade:** P2
+**Labels:** bug, persistence, localStorage
+
+**Ambiente**
+- OS: Windows
+- Execução local: `node server.js` ou `npx http-server . -p 4173`
+- Arquivos relevantes: `app.js`, `server.js`, `tests/qa.spec.js`
+
+**Evidências**
+- Teste Playwright: `tests/qa.spec.js` → caso "Concluir e reabrir tarefa + persistência".
+- Artefatos gerados pelo Playwright: `test-results/` (trace, screenshots)
+
+**Diagnóstico inicial / Hipóteses**
+- Chave de `localStorage` inconsistente entre `loadTasks()` e `saveTasks()`.
+- `toggleTaskStatus` não chama `saveTasks()` após alternar `completed`.
+- Mutação de `state.tasks` pode não ser persistida antes do reload.
+
+**Sugestão de correção**
+1. Verificar `STORAGE_KEY` em `app.js` (mesma chave em `loadTasks()` e `saveTasks()`).
+2. Garantir que `saveTasks()` seja chamado após qualquer mutação: criação, edição, exclusão, toggle.
+3. Adicionar testes unitários e E2E que validem persistência após reload.
+
+**Checklist**
+- [ ] Reproduzir bug localmente e anexar evidências
+- [ ] Escrever teste unitário para `saveTasks`/`loadTasks`
+- [ ] Corrigir persistência em `app.js`
+- [ ] Rodar suíte Playwright e confirmar todos os testes passarem
+- [ ] Fechar issue com referência ao commit/PR
+
+(Use o script `copy-issue-to-clipboard.ps1` ou `copy-issue.bat` na raiz do projeto para copiar este conteúdo para a área de transferência do Windows.)
