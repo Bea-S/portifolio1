@@ -135,6 +135,21 @@ components:
         title:
           type: string
           example: "Estudar QA"
+        ownerName:
+          type: string
+          example: "Beatriz"
+        startDate:
+          type: string
+          format: date
+          example: "2026-08-14"
+        endDate:
+          type: string
+          format: date
+          example: "2026-08-20"
+        level:
+          type: string
+          enum: [facil, intermediario, dificil]
+          example: intermediario
         completed:
           type: boolean
           example: false
@@ -161,6 +176,21 @@ components:
           minLength: 1
           maxLength: 120
           example: "Fazer revisão do código"
+        ownerName:
+          type: string
+          example: "Beatriz"
+        startDate:
+          type: string
+          format: date
+          example: "2026-08-14"
+        endDate:
+          type: string
+          format: date
+          example: "2026-08-20"
+        level:
+          type: string
+          enum: [facil, intermediario, dificil]
+          example: intermediario
         completed:
           type: boolean
           example: false
@@ -175,6 +205,21 @@ components:
           minLength: 1
           maxLength: 120
           example: "Atualizar checklist da sprint"
+        ownerName:
+          type: string
+          example: "Beatriz"
+        startDate:
+          type: string
+          format: date
+          example: "2026-08-14"
+        endDate:
+          type: string
+          format: date
+          example: "2026-08-20"
+        level:
+          type: string
+          enum: [facil, intermediario, dificil]
+          example: intermediario
         completed:
           type: boolean
           example: true

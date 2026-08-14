@@ -3,45 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do List QA</title>
+    <title>To-Do List</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app">
       <header class="header">
-        <h1>Lista de tarefas</h1>
-        <p>Gerencie suas atividades pessoais e acompanhe o progresso.</p>
+        <div class="header-top">
+          <div>
+            <h1></h1>
+            <p></p>
+          </div>
+          <div class="theme-toggle-wrap">
+            <label for="theme-toggle" class="sr-only">Alternar modo</label>
+            <button id="theme-toggle" aria-pressed="false" class="theme-toggle">🌙</button>
+          </div>
+        </div>
       </header>
 
-      <section class="task-form-container">
-        <form id="task-form" class="task-form">
-          <label for="task-input" class="sr-only">Nova tarefa</label>
-          <input
-            id="task-input"
-            name="task"
-            type="text"
-            placeholder="Digite uma nova tarefa"
-            maxlength="120"
-            autocomplete="off"
-          />
-          <button id="submit-button" type="submit">Adicionar</button>
-          <button id="cancel-edit" type="button" class="secondary hidden">Cancelar</button>
-        </form>
-      </section>
+      <div class="main-grid">
+        <div class="left-col">
+          <section class="task-grid-section">
+            <div class="grid-controls">
+              <div class="filter-group" role="tablist" aria-label="Status das tarefas">
+                <button class="filter-btn active" data-filter="all" type="button">Todas</button>
+                <button class="filter-btn" data-filter="active" type="button">Ativas</button>
+                <button class="filter-btn" data-filter="completed" type="button">Concluídas</button>
+              </div>
+              <div>
+                <button id="add-new-row" type="button" class="secondary">Adicionar nova linha</button>
+              </div>
+            </div>
 
-      <section class="toolbar" aria-label="Filtros de tarefas">
-        <div class="filter-group" role="tablist" aria-label="Status das tarefas">
-          <button class="filter-btn active" data-filter="all" type="button">Todas</button>
-          <button class="filter-btn" data-filter="active" type="button">Ativas</button>
-          <button class="filter-btn" data-filter="completed" type="button">Concluídas</button>
+            <div class="task-grid">
+              <div class="task-grid-header">
+                <div class="col-title">Tarefa</div>
+                <div class="col-start">Data de Início</div>
+                <div class="col-end">Data de Fim</div>
+                <div class="col-level">Nível</div>
+                <div class="col-actions">Ações</div>
+              </div>
+              <div id="task-rows" class="task-rows"></div>
+              <p id="empty-state" class="empty-state hidden">Nenhuma tarefa encontrada.</p>
+            </div>
+          </section>
         </div>
-        <span id="task-counter" class="counter">0 tarefas</span>
-      </section>
 
-      <section class="task-list-wrapper">
-        <ul id="task-list" class="task-list" aria-live="polite"></ul>
-        <p id="empty-state" class="empty-state hidden">Nenhuma tarefa encontrada.</p>
-      </section>
+        <section class="task-list-wrapper">
+          <ul id="task-list" class="task-list" aria-live="polite"></ul>
+          <p id="empty-state" class="empty-state hidden">Nenhuma tarefa encontrada.</p>
+        </section>
+      </div>
     </main>
 
     <script src="app.js"></script>

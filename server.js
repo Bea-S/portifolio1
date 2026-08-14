@@ -11,14 +11,20 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 const tasks = [
-  { id: '1', title: 'Estudar QA', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: '2', title: 'Revisar requisitos', completed: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+  { id: '1', title: 'Estudar', ownerName: 'Beatriz', startDate: '2026-08-10', endDate: '2026-08-14', level: 'facil', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '2', title: 'Resumir', ownerName: 'Carlos', startDate: '2026-08-01', endDate: '2026-08-05', level: 'intermediario', completed: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '3', title: 'Refazer', ownerName: 'Beatriz', startDate: '2026-08-15', endDate: '2026-09-01', level: 'dificil', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '4', title: 'Concluir', ownerName: 'Ana', startDate: '2026-07-10', endDate: '2026-08-20', level: 'intermediario', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
 ];
 
 function serializeTask(task) {
   return {
     id: task.id,
     title: task.title,
+    ownerName: task.ownerName || null,
+    startDate: task.startDate || null,
+    endDate: task.endDate || null,
+    level: task.level || null,
     completed: Boolean(task.completed),
     createdAt: task.createdAt,
     updatedAt: task.updatedAt,
@@ -46,7 +52,7 @@ app.get('/api/tasks', (req, res) => {
 });
 
 app.post('/api/tasks', (req, res) => {
-  const { title, completed = false } = req.body || {};
+  const { title, completed = false, ownerName, startDate, endDate, level } = req.body || {};
 
   if (typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ message: 'O campo title é obrigatório.' });
@@ -56,6 +62,10 @@ app.post('/api/tasks', (req, res) => {
   const task = {
     id: `task-${Date.now()}`,
     title: title.trim(),
+    ownerName: ownerName ? String(ownerName).trim() : null,
+    startDate: startDate || null,
+    endDate: endDate || null,
+    level: level || null,
     completed: Boolean(completed),
     createdAt: now,
     updatedAt: now,
@@ -82,7 +92,7 @@ app.put('/api/tasks/:id', (req, res) => {
     return res.status(404).json({ message: 'Tarefa não encontrada.' });
   }
 
-  const { title, completed } = req.body || {};
+  const { title, completed, ownerName, startDate, endDate, level } = req.body || {};
 
   if (typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ message: 'O campo title é obrigatório.' });
@@ -90,6 +100,10 @@ app.put('/api/tasks/:id', (req, res) => {
 
   task.title = title.trim();
   task.completed = Boolean(completed);
+  task.ownerName = ownerName !== undefined ? ownerName : task.ownerName;
+  task.startDate = startDate !== undefined ? startDate : task.startDate;
+  task.endDate = endDate !== undefined ? endDate : task.endDate;
+  task.level = level !== undefined ? level : task.level;
   task.updatedAt = new Date().toISOString();
 
   return res.json(buildTaskResponse(task));
