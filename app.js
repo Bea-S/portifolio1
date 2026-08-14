@@ -133,15 +133,35 @@ async function renderTasks() {
 function createRowElement(task) {
   const row = document.createElement('div');
   row.className = 'task-row';
+
+  function formatDateForDisplay(iso) {
+    if (!iso) return '';
+    // accept yyyy-mm-dd or full iso
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
   row.dataset.id = task.id;
 
   const titleInput = document.createElement('input');
   titleInput.type = 'text';
   titleInput.value = task.title || '';
+
+    const startDisplay = document.createElement('div');
+    startDisplay.className = 'date-display';
+    startDisplay.textContent = formatDateForDisplay(task.startDate);
+
   titleInput.placeholder = 'Tarefa';
   titleInput.disabled = true;
   if (!task.title && !task.id.startsWith('new-')) {
     titleInput.value = ['Estudar', 'Resumir', 'Refazer', 'Concluir'][Math.floor(Math.random() * 4)];
+
+    const endDisplay = document.createElement('div');
+    endDisplay.className = 'date-display';
+    endDisplay.textContent = formatDateForDisplay(task.endDate);
   }
 
   const startInput = document.createElement('input');
@@ -192,6 +212,11 @@ function createRowElement(task) {
       startInput.disabled = true;
       endInput.disabled = true;
       levelSelect.disabled = true;
+      // show display spans
+      startInput.style.display = 'none';
+      endInput.style.display = 'none';
+      startDisplay.style.display = '';
+      endDisplay.style.display = '';
       editBtn.textContent = 'Editar';
     } else {
       titleInput.disabled = false;
@@ -223,6 +248,11 @@ function createRowElement(task) {
   actions.appendChild(addBtn);
 
   row.appendChild(titleInput);
+  // show display by default, inputs hidden when not editing
+  startInput.style.display = 'none';
+  endInput.style.display = 'none';
+  row.appendChild(startDisplay);
+  row.appendChild(endDisplay);
   row.appendChild(startInput);
   row.appendChild(endInput);
   row.appendChild(levelSelect);
